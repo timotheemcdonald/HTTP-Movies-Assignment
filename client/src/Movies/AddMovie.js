@@ -26,10 +26,12 @@ const AddMovie = (props) => {
 
       const onSubmit = (event) => {
           event.preventDefault()
-          axios.post(`http://localhost:5000/api/movies/`)
+          axios.post(`http://localhost:5000/api/movies/`, newMovie)
           .then(res => {
               console.log(res, 'res in addMovie')
-                setMovie(res.data)
+                props.setMovieList([...props.movieList],res.data)
+                history.push("/movies")
+      
           })
           .catch(error => {
               console.log(error, 'error in adding movie')

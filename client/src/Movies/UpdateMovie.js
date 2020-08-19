@@ -10,7 +10,7 @@ const blankMovie = {
 
 const UpdateMovie = (props) => {
     const {id} = useParams()
-    const histry = useHistory()
+    const history = useHistory()
     const [movie, setMovie] = useState(blankMovie)
 
     useEffect(() => {
@@ -37,13 +37,15 @@ const UpdateMovie = (props) => {
           .then(res => {
               console.log(res, 'res in submit update form')
               const newMovie = props.movieList.map(value => {
-                  if (value.data.id === props.movieList.id) {
-                      return  value
+                  if (value.data.id === res.data.id) {
+                      return  res.data
                   } else {
-                      return props.movieList
+                      return value
                   }
               })
               props.setMovieList(newMovie)
+              setMovie(movie)
+              history.push(`/movies`)
           })
           .catch(error => {
               console.log(error, 'this is the error')
