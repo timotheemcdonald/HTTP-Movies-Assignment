@@ -36,16 +36,17 @@ const UpdateMovie = (props) => {
           axios.put(`http://localhost:5000/api/movies/${id}`, movie)
           .then(res => {
               console.log(res, 'res in submit update form')
-              const newMovie = props.movieList.map(value => {
-                  if (value.data.id === res.data.id) {
-                      return  res.data
-                  } else {
-                      return value
-                  }
-              })
-              props.setMovieList(newMovie)
-              setMovie(movie)
-              history.push(`/movies`)
+            //   const newMovie = props.movieList.map(value => {
+            //       if (value.data.id === res.data.id) {
+            //           return  res.data
+            //       } else {
+            //           return value
+            //       }
+            //   })
+            //   props.setMovieList(newMovie)
+            //   setMovie(movie)
+            props.setUpdate(!props.update)
+              history.push("/")
           })
           .catch(error => {
               console.log(error, 'this is the error')

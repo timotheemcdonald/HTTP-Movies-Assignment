@@ -3,7 +3,6 @@ import {useHistory, useParams} from 'react-router-dom'
 import axios from 'axios'
 
 const blankMovie = {
-    id: 0,
     title: '',
     director: '',
     metascore: 0,
@@ -12,9 +11,20 @@ const blankMovie = {
 
 const AddMovie = (props) => {
     const [newMovie, setMovie] = useState(blankMovie)
+    const [star, setStar] = useState('')
 
     const history = useHistory()
     const {id} = useParams()
+
+    // useEffect(() => {
+    //     axios
+    //       .get(`http://localhost:5000/api/movies/${id}`)
+    //       .then((res) => {
+    //         // res.data
+    //         setMovie(res.data);
+    //       })
+    //       .catch((err) => console.error(err));
+    //   }, [id]);
 
       const onChange = (event) => {
           event.preventDefault()
@@ -24,13 +34,27 @@ const AddMovie = (props) => {
           })
       }
 
+      const onStarsSubmit = (e) => {
+          e.preventDefault()
+          setMovie({
+              ...newMovie,
+              stars: [...newMovie.stars, star]
+          })
+      }
+
+      const onStarsChange = (e) => {
+          e.preventDefault()
+          setStar(e.target.value)
+      }
+
       const onSubmit = (event) => {
           event.preventDefault()
           axios.post(`http://localhost:5000/api/movies/`, newMovie)
           .then(res => {
               console.log(res, 'res in addMovie')
                 props.setMovieList([...props.movieList],res.data)
-                history.push("/movies")
+                history.push("/")
+                props.setUpdate(!props.update)
       
           })
           .catch(error => {
@@ -40,18 +64,13 @@ const AddMovie = (props) => {
 
 
 
+
+
     return(
         <div>
             Add a Movie
             <form onSubmit={onSubmit}>
-            <div>Id Number:
-            <input 
-                type="text"
-                name="id"
-                value={newMovie.id}
-                onChange={onChange}
-                />
-                </div>
+          
                 <div>Title:
             <input 
                 type="text"
@@ -76,16 +95,18 @@ const AddMovie = (props) => {
                 value={newMovie.metascore}
                 onChange={onChange}
              />
-       </div>
-       <div>Stars:
+              </div>
+                <button type="submit">Submit</button>
+                </form>
+    <div>{newMovie.stars.map(star => <p>{star}</p> )}</div>
+                <form onSubmit={onStarsSubmit}>Stars:
             <input 
                 type="text"
-                name="stars[]"
-                value={newMovie.stars}
-                onChange={onChange}
+                name="stars"
+                value={star}
+                onChange={onStarsChange}
                 />
-                </div>
-                <button type="submit">Submit</button>
+                <button type="submit">Add Star</button>
                 </form>
         </div>
     )

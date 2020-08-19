@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import MovieCard from "./MovieCard";
 
-function Movie({ addToSavedList }) {
+function Movie(props) {
   const [movie, setMovie] = useState(null);
   const params = useParams();
   const history = useHistory()
@@ -16,7 +16,7 @@ function Movie({ addToSavedList }) {
   };
 
   const saveMovie = () => {
-    addToSavedList(movie);
+    props.addToSavedList(movie);
   };
 
   useEffect(() => {
@@ -37,9 +37,11 @@ function Movie({ addToSavedList }) {
     axios
     .delete(`http://localhost:5000/api/movies/${movie.id}`)
     .then((res) => {
-      setMovie(res.data);
+     
       console.log(res, res.data, 'res and res.data in delete movie')
-      history.push("/movies");
+      props.setUpdate(!props.update)
+      history.push("/");
+      
       // afternoon project
       // server returns the id of the deleted item
       // you will have to filter out that item from the item list
